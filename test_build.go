@@ -142,7 +142,7 @@ func main() {
 	url := c.PostForm("url")
 	stime := c.PostForm("store_time")
 	capa := c.PostForm("capacity")
-        stmt, err := db.Prepare("update person set sname= ?, address= ?, tel= ?, url= ?, stime= ?, capacity= ? where scode= ?;")
+        stmt, err := db.Prepare("update store set sname= ?, address= ?, tel= ?, url= ?, stime= ?, capacity= ? where scode= ?;")
         if err != nil {
             fmt.Print(err.Error())
         }
