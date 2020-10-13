@@ -30,6 +30,14 @@ func main() {
 	STime         string
 	Capacity      int
     }
+
+    type Menu struct{
+	MCode        string
+	MName        string
+	Price        int
+	Detail       string
+    }
+
     router := gin.Default()
 
     // GET a store detail
