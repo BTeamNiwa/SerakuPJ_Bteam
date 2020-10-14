@@ -179,7 +179,7 @@ func main() {
         if err != nil {
             fmt.Print(err.Error())
         }
-        _, err = stmt.Exec(id)
+        _, err = stmt.Exec(scode)
         if err != nil {
             fmt.Print(err.Error())
         }
