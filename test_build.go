@@ -175,7 +175,7 @@ func main() {
     // Delete resources
     router.DELETE("/store", func(c *gin.Context) {
         scode := c.Query("store_code")
-        stmt, err := db.Prepare("delete from store where id= ?;")
+        stmt, err := db.Prepare("delete from store where scode= ?;")
         if err != nil {
             fmt.Print(err.Error())
         }
