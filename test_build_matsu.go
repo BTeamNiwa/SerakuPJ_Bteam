@@ -71,7 +71,7 @@ func main() {
             menu  Menu
             menus []Menu
         )
-        rows, err := db.Query("select mcode, mname, price, detail, from menu;")
+        rows, err := db.Query("select mcode, mname, price, detail from menu;")
         if err != nil {
             fmt.Print(err.Error())
         }
@@ -131,7 +131,7 @@ func main() {
         mname := c.PostForm("menu_name")
         price := c.PostForm("price")
 	detail := c.PostForm("detail")
-        stmt, err := db.Prepare("update menu set mname= ?, price= ?, detail= ?, where mcode= ?;")
+        stmt, err := db.Prepare("update menu set mname= ?, price= ?, detail= ? where mcode= ?;")
         if err != nil {
             fmt.Print(err.Error())
         }
