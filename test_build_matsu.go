@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-    db, err := sql.Open("mysql", "matsu:Seraku1!@tcp(localhost:3306)/gotest")
+    db, err := sql.Open("mysql", "user1:Seraku1!@tcp(localhost:3306)/pj")
     if err != nil {
         fmt.Print(err.Error())
     }
