@@ -99,7 +99,7 @@ func main() {
         address := c.PostForm("address")
         tel := c.PostForm("tel")
         url:= c.PostForm("url")
-        stime:= c.PostForm("stime")
+        stime:= c.PostForm("store_time")
         capacity:= c.PostForm("capacity")
 
         stmt, err := db.Prepare("insert into store (scode, sname, address, tel, url, stime, capacity) values(?,?,?,?,?,?,?);")
@@ -145,7 +145,7 @@ func main() {
         address := c.PostForm("address")
 	tel := c.PostForm("tel")
         url:= c.PostForm("url")
-        stime:= c.PostForm("stime")
+        stime:= c.PostForm("store_time")
         capacity:= c.PostForm("capacity")
 
 
