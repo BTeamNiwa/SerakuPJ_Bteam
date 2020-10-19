@@ -1,0 +1,33 @@
+Go言語よりｍｙSQLへのアクセス
+
+初期設定
+db err変数にsql.Open("mysql","user@pass@host:3306/DB名")
+各エラー処理を実行
+
+db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/gotest")
+    if err != nil {
+        fmt.Print(err.Error())
+    }
+    defer db.Close()
+    // make sure connection is available
+    err = db.Ping()
+    if err != nil {
+        fmt.Print(err.Error())
+    }
+
+
+import "time"
+import "strconv
+
+//UNIXタイムの16進数化
+strconv.FortmatInt(time.Now().Unix(),16)
+
+APIサーバの動作メモ
+→API設計_20201019を参照
+・Order（注文情報）_編集中
+・order、listテーブル利用イメージ
+・オーダー発生時のフロー
+
+--20201019ここまで
+
+
