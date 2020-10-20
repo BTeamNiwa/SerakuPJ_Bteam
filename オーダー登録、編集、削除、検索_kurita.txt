@@ -1,0 +1,28 @@
+#オーダー伝票 全体を取得
+select `order`.ocode, `order`.day, store.sname, `order`.tabnam, `order`.flg, menu.mname, list.quantity
+    from `order`, list, store, menu
+    where store.scode = `order`.scode and
+    `order`.ocode = list.ocode and
+    list.mcode = menu.mcode;
+
+#オーダー伝票　入力されたオーダーコード取得
+  select `order`.ocode, `order`.day, store.sname, `order`.tabnam, `order`.flg, menu.mname, list.quantity
+    from `order`, list, store, menu
+    where store.scode = `order`.scode and
+    `order`.ocode = list.ocode and
+    list.mcode = menu.mcode and
+    `order`.ocode = ?;
+
+#オーダー伝票　登録
+①insert into `order`(ocode, day, scode, tabnam, flg) vlues (?, ?, ?, ?, ?);
+②insert into list(mcode, quantity, ocode) values (?, ?, ?); 　←lcodeは自動で値が入るため入力しない
+
+#追加注文した時　登録
+insert into list(mcode, quantity, ocode) select ?, ?, ocode from `order` where  scode = ? and tabnam = ? and flg = 0;
+
+#フラグを更新
+update `order` set  flg = 1  where scode=? and tabnam = ?;
+
+#オーダー伝票　削除　※1 flg=0の時  ※2 外部キー制約により②から消すことはできない
+①delete from list where ocode = ?;
+②delete from `order` where ocode= ?;
