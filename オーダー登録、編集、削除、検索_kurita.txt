@@ -23,6 +23,9 @@ insert into list(mcode, quantity, ocode) select ?, ?, ocode from `order` where  
 #フラグを更新
 update `order` set  flg = 1  where scode=? and tabnum = ?;
 
+#数量を更新
+update  list set quantity=? where mcode=? and ocode=?;
+
 #オーダー伝票　一部メニューを削除　※ flg=0の時  
 delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and list.mcode=? and`order`.flg=0;
 
