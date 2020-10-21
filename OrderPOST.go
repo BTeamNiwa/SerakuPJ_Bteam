@@ -19,6 +19,13 @@ type Order struct {
 	Flg    int
 }
 
+type List struct{
+	LCode    string
+	MCode    string
+	Quantity int
+	OCode    string
+}
+
 func main() {
 	db, err := sql.Open("mysql", "user1:seraku1!@tcp(localhost:3306)/pj")
 	if err != nil {
@@ -63,6 +70,7 @@ func main() {
 				break
 			}
 		}
+		defer rows.Close()
 
 		if Order_flg == 0 {
 			stmt, err1 := db.Prepare("insert into `order` (ocode, day, scode, tabnam, flg) values(?,?,?,?,?);")
@@ -88,6 +96,45 @@ func main() {
 		})
 
 	Order_flg = 0
+	})
+
+	//Get order,list table
+	router.GET("/order_table", func *gin.Context){
+		var(
+			order  Order
+			orders []Order
+			list   List
+			lists  []List
+		)
+		rows1, err1 := db.Query("select ocode, day, scode, tabnam, flg from `order`; ")
+		if err1 != nil{
+			fmt.Print(err1.Error())
+		}
+		for rows1.Next(){
+			err1 = rows1.Scan(&order.OCode, &order.Day, &order.SCode, &order.Tabnam, &order.Flg)
+			orders = append(orders, order)
+			if err != nil{
+				fmt.Print(err1.Error())
+			}
+		}
+		defer rows1.Close()
+
+		rows2, err2 := db.Query("select lcode, mcode, quantity, ocode from list; ")
+		if err2 != nil{
+			fmt.Print(err2.Error())
+		}
+		for rows2.Next(){
+			err2 = rows2.Scan(&list.LCode, &list.MCode, &list.Quantity, &list.OCode)
+			lists = append(lists, list)
+			if err != nil{
+				fmt.Print(err.Error())
+			}
+		}
+		defer rows2.Close()
+		c.JSON(http.StatusOK, gin.H{
+			"order_table":orders,
+			"list_table":lists,
+		})
 	})
 
 	router.Run(":80")
