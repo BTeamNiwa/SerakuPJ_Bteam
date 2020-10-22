@@ -249,5 +249,38 @@ func main() {
 		})
 	})
 
+	
+// Delete resources //選択したオーダーコードのリストを全て削除　※ 外部キー制約により②から消すことはできない
+    router.DELETE("/order", func(c *gin.Context) {
+        ocode := c.Query("order_code")
+        stmt, err := db.Prepare("delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and`order`.flg=0;")
+        if err != nil {
+            fmt.Print(err.Error())
+        }
+        _, err = stmt.Exec(scode)
+        if err != nil {
+            fmt.Print(err.Error())
+        }
+        c.JSON(http.StatusOK, gin.H{
+            "message": fmt.Sprintf("Successfully deleted user: %s", ocode),
+        })
+    })
+	
+// Delete resources //選択したオーダーコードのリストの削除
+    router.DELETE("/order", func(c *gin.Context) {
+        ocode := c.Query("order_code")
+        stmt, err := db.Prepare("delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and`order`.flg=0;")
+        if err != nil {
+            fmt.Print(err.Error())
+        }
+        _, err = stmt.Exec(scode)
+        if err != nil {
+            fmt.Print(err.Error())
+        }
+        c.JSON(http.StatusOK, gin.H{
+            "message": fmt.Sprintf("Successfully deleted user: %s", ocode),
+        })
+    })
+	
 	router.Run(":80")
 }
