@@ -98,8 +98,25 @@ func main() {
 	Order_flg = 0
 	})
 
+	//Payment
+	router.PUT("/payment", func(c *gin.Context){
+		ocode := c.PostForm("order_code")
+
+		stmt, err := db.Prepare("update `order` set flg = 1 where ocode = ?")
+		if err != nil {
+			fmt.Print(err.Error())
+		}
+		_, err = stmt.Exec(ocode)
+		if err != nil {
+			fmt.Print(err.Error())
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("Successfully payment : %s", ocode),
+		})
+	})
+
 	//Get order,list table
-	router.GET("/order_table", func (c *gin.Context){
+	router.GET("/orders", func (c *gin.Context){
 		var(
 			order  Order
 			orders []Order
@@ -137,20 +154,98 @@ func main() {
 		})
 	})
 
-	//Payment
-	router.PUT("/payment", func(c *gin.Context){
-		ocode := c.PostForm("order_code")
+	//Get order,list table by a store
+	router.GET("/order/:scode", func (c *gin.Context){
+		var(
+			order  Order
+			orders []Order
+			list   List
+			lists  []List
+		)
+		scode := c.Param("scode")
 
-		stmt, err := db.Prepare("update `order` set flg = 1 where ocode = ?")
-		if err != nil {
-			fmt.Print(err.Error())
+		rows1, err1 := db.Query("select ocode, day, scode, tabnam, flg from `order`;")
+		if err1 != nil{
+			fmt.Print(err1.Error())
 		}
-		_, err = stmt.Exec(ocode)
-		if err != nil {
-			fmt.Print(err.Error())
+		for rows1.Next(){
+			err1 = rows1.Scan(&order.OCode, &order.Day, &order.SCode, &order.Tabnam, &order.Flg)
+			if err1 != nil{
+				fmt.Print(err1.Error())
+			}
+
+			if order.SCode == scode{
+				orders = append(orders, order)
+
+				rows2, err2 := db.Query("select lcode, mcode, quantity, ocode from list;")
+				if err2 != nil{
+					fmt.Print(err2.Error())
+				}
+				for rows2.Next(){
+					err2 = rows2.Scan(&list.LCode, &list.MCode, &list.Quantity, &list.OCode)
+					if err2 != nil{
+						fmt.Print(err2.Error())
+					}
+					if list.OCode == order.OCode{
+						lists = append(lists, list)
+					}
+				}
+				defer rows2.Close()
+			}
 		}
+		defer rows1.Close()
+
 		c.JSON(http.StatusOK, gin.H{
-			"message": fmt.Sprintf("Successfully payment : %s", ocode),
+			"Order":orders,
+			"List":lists,
+		})
+	})
+
+	//Get order,list table at a table by a store 
+	router.GET("/order", func (c *gin.Context){
+		var(
+			order  Order
+			orders []Order
+			list   List
+			lists  []List
+		)
+		scode := c.PostForm("store_code")
+		tabnam, _ := strconv.Atoi(c.PostForm("table_no"))
+
+		rows1, err1 := db.Query("select ocode, day, scode, tabnam, flg from `order`;")
+		if err1 != nil{
+			fmt.Print(err1.Error())
+		}
+		for rows1.Next(){
+			err1 = rows1.Scan(&order.OCode, &order.Day, &order.SCode, &order.Tabnam, &order.Flg)
+			if err1 != nil{
+				fmt.Print(err1.Error())
+			}
+
+			if order.Tabnam == tabnam && order.SCode == scode{
+				orders = append(orders, order)
+
+				rows2, err2 := db.Query("select lcode, mcode, quantity, ocode from list;")
+				if err2 != nil{
+					fmt.Print(err2.Error())
+				}
+				for rows2.Next(){
+					err2 = rows2.Scan(&list.LCode, &list.MCode, &list.Quantity, &list.OCode)
+					if err2 != nil{
+						fmt.Print(err2.Error())
+					}
+					if list.OCode == order.OCode{
+						lists = append(lists, list)
+					}
+				}
+				defer rows2.Close()
+			}
+		}
+		defer rows1.Close()
+
+		c.JSON(http.StatusOK, gin.H{
+			"Order":orders,
+			"List":lists,
 		})
 	})
 
