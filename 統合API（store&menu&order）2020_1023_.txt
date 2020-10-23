@@ -449,9 +449,9 @@ type List struct{
                         lists  []List
                 )
                 scode := c.PostForm("store_code")
-                tabno, _ := strconv.Atoi(c.PostForm("table_no"))
+                tabnum, _ := strconv.Atoi(c.PostForm("table_no"))
 
-                rows1, err1 := db.Query("select ocode, day, scode, tabno, flg from `order`;")
+                rows1, err1 := db.Query("select ocode, day, scode, tabnum, flg from `order`;")
                 if err1 != nil{
                         fmt.Print(err1.Error())
                 }
@@ -461,7 +461,7 @@ type List struct{
                                 fmt.Print(err1.Error())
                         }
 
-                        if order.Tabnum == tabno && order.SCode == scode{
+                        if order.Tabnum == tabnum && order.SCode == scode{
                                 orders = append(orders, order)
 
                                 rows2, err2 := db.Query("select lcode, mcode, quantity, ocode from list;")
@@ -504,7 +504,7 @@ type List struct{
                 Order_flg := 0
 
                 //Search Order table
-                rows, err := db.Query("select ocode, day, scode, tabno, flg from `order`;")
+                rows, err := db.Query("select ocode, day, scode, tabnum, flg from `order`;")
                 if err != nil {
                         fmt.Print(err.Error())
                 }
@@ -596,6 +596,10 @@ type List struct{
             "message": fmt.Sprintf("Successfully deleted user: %s", ocode),
         })
     })
+
+
+
+
 
 
 
