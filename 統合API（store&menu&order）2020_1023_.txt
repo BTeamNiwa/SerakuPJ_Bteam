@@ -572,6 +572,12 @@ type List struct{
         if err != nil {
             fmt.Print(err.Error())
         }
+        
+        stmt2, err2 := db.Prepare("delete from `order` where ocode=? and flg=0;")
+        if err != nil {
+            fmt.Print(err.Error())
+        
+        
         _, err = stmt.Exec(ocode)
         if err != nil {
             fmt.Print(err.Error())
