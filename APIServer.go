@@ -546,6 +546,31 @@ func main() {
 			"List":lists,
 		})
 	})
+	router.DELETE("/order", func(c *gin.Context) {
+		ocode := c.Query("order_code")
+
+		stmt1, err1 := db.Prepare("delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and`order`.flg=0;")
+		if err1 != nil {
+			fmt.Print(err1.Error())
+		}
+		_, err1 = stmt1.Exec(ocode)
+		if err1 != nil {
+			fmt.Print(err1.Error())
+		}
+		
+		stmt2, err2 := db.Prepare("delete from `order` where ocode = ? and flg = 0;")
+		if err2 != nil {
+			fmt.Print(err2.Error())
+		}
+		_, err2 = stmt2.Exec(ocode)
+		if err2 != nil {
+			fmt.Print(err2.Error())
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("Successfully deleted user: %s", ocode),
+		})
+	})
 
 	router.Run(":80")
 }
