@@ -572,5 +572,22 @@ func main() {
 		})
 	})
 
+	router.DELETE("/all_order", func(c *gin.Context){
+		_, err1 := db.Query("delete from list;")
+		if err1 != nil {
+			fmt.Print(err1.Error())
+		}
+		
+		_, err2 := db.Query("delete from `order`;")
+		if err2 != nil {
+			fmt.Print(err2.Error())
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": fmt.Sprintf("Successfully deleted All Order."),
+		})
+
+	})
+
 	router.Run(":80")
 }
