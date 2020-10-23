@@ -257,7 +257,7 @@ func main() {
         if err != nil {
             fmt.Print(err.Error())
         }
-        _, err = stmt.Exec(scode)
+        _, err = stmt.Exec(ocode)
         if err != nil {
             fmt.Print(err.Error())
         }
@@ -265,15 +265,17 @@ func main() {
             "message": fmt.Sprintf("Successfully deleted user: %s", ocode),
         })
     })
-	
-// Delete resources //選択したオーダーコードのリストの削除
-    router.DELETE("/order", func(c *gin.Context) {
+
+
+
+ // Delete resources //オーダー伝票　一部メニューを削除　※ flg=0の時 
+    router.DELETE("/list", func(c *gin.Context) {
         ocode := c.Query("order_code")
-        stmt, err := db.Prepare("delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and`order`.flg=0;")
+        stmt, err := db.Prepare("delete list from list left join `order` on list.ocode = `order`.ocode where list.ocode=? and list.mcode=? and`order`.flg=0;")
         if err != nil {
             fmt.Print(err.Error())
         }
-        _, err = stmt.Exec(scode)
+        _, err = stmt.Exec(ocode)
         if err != nil {
             fmt.Print(err.Error())
         }
