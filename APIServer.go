@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+    gin.SetMode(gin.ReleaseMode)
     db, err := sql.Open("mysql", "user1:Seraku1!@tcp(localhost:3306)/pj")
     if err != nil {
         fmt.Print(err.Error())
