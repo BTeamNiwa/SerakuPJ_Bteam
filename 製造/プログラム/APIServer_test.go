@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("mysql", "user1:Seraku1!@tcp(localhost:3306)/pj")
-	if err != nil {
+	//reading Setup File(user, pass)
+	db, err := sql.Open("mysql", "user:pass@tcp(localhost:3306)/pj")	if err != nil {
 		fmt.Print(err.Error())
 	}
 	defer db.Close()

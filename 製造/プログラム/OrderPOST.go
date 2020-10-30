@@ -27,8 +27,8 @@ type List struct{
 }
 
 func main() {
-	db, err := sql.Open("mysql", "user1:seraku1!@tcp(localhost:3306)/pj")
-	if err != nil {
+	//reading Setup File(user, pass)
+	db, err := sql.Open("mysql", "user:pass@tcp(localhost:3306)/pj")	if err != nil {
 		fmt.Print(err.Error())
 	}
 	defer db.Close()
